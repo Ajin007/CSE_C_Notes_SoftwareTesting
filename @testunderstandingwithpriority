@@ -1,0 +1,340 @@
+package com.example;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+
+public class AppTest 
+{
+    //declare inside a class so it is accepted by all the methods that we are going to create
+    ChromeOptions option;
+    RemoteWebDriver driver;
+
+  //new method and i created that above the @test anotation
+@BeforeTest()
+//method 1
+public void driverConnect() throws MalformedURLException{
+    option=new ChromeOptions();
+
+   driver=new RemoteWebDriver(new URL("http://localhost:4444"),option);
+   System.out.println("I amm connecting a driver");
+
+
+}
+
+@BeforeMethod()
+public void connectGoogle() throws InterruptedException{
+  System.out.println("website one got selected");
+
+
+}
+   
+        
+        
+   
+    @Test(priority = 3)
+    //This is the initial method we already created
+    public void accessGoogle() throws MalformedURLException, InterruptedException
+
+    {
+        Thread.sleep(3000);
+    
+        //connect google
+       driver.get("https://www.google.com");
+      
+        Thread.sleep(3000);
+    
+        //connect google
+       driver.get("https://www.google.com");
+       Thread.sleep(3000);
+      
+
+        
+
+        //using the key board and pressing the enter key
+        driver.findElement(By.xpath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/textarea")).
+        sendKeys("Do you people understand now"+Keys.RETURN);
+       
+
+        //using selector-----> i selected id , i also shall select class .
+        driver.findElement(By.cssSelector("#APjFqb")).sendKeys("Do you people understand now"+Keys.RETURN);
+
+        /*
+         * css selector another method 
+         * contains----*------{tagname[id or class (methods)='elements']}
+         * startswith----^
+         * endswith-----$
+         */
+        driver.findElement(By.cssSelector("textarea[id*='APj']")).sendKeys("Do you people understand now"+Keys.RETURN);
+        // driver.findElement(By.cssSelector("textarea[id*='APjiuk']")).sendKeys("hi sneha"+Keys.RETURN);
+
+        //startwith----^
+        // driver.findElement(By.cssSelector("textarea[id^='AP']")).sendKeys("hi sneha"+Keys.RETURN);
+
+        //Endwith---$
+       // driver.findElement(By.cssSelector("textarea[id$='qb']")).sendKeys("hi sneha"+Keys.RETURN);
+
+
+        /*
+         * name
+         * 
+         */
+        //driver.findElement(By.name("q")).sendKeys("hi sneha"+Keys.RETURN);
+
+
+        /*
+         * linkText-------
+         *              1. a tag
+         *              2. href="hyperlinlk"
+         *              3."data"
+         */
+
+        driver.findElement(By.linkText("Images")).click();
+    }
+
+         // half of link Text
+         //driver.findElement(By.partialLinkText("Ima")).click();
+
+
+         //****************************************************************WEB ELEMENTS********************/
+
+         @BeforeMethod()
+         public void connectDemoautomationtesting() throws InterruptedException{
+           System.out.println("Test 2 started");
+
+         }
+
+         @Test(priority = 2)
+         public void formUnderstandingMethod() throws InterruptedException{
+            driver.get("https://demo.automationtesting.in/Register.html");
+            Thread.sleep(3000);
+            
+         //First name
+        driver.findElement(By.xpath("/html/body/section/div/div/div[2]/form/div[1]/div[1]/input")).sendKeys("Ajin");
+
+        //Lastname
+        driver.findElement(By.xpath("//*[@id='basicBootstrapForm']/div[1]/div[2]/input")).sendKeys("Roch");
+
+        //textarea
+        driver.findElement(By.xpath("/html/body/section/div/div/div[2]/form/div[2]/div/textarea")).sendKeys("HI CSE C section people how are you");
+
+        //email address
+        driver.findElement(By.xpath("/html/body/section/div/div/div[2]/form/div[3]/div[1]/input")).sendKeys("ajin@007.com");
+
+        //phone number
+    
+
+        driver.findElement(By.xpath("/html/body/section/div/div/div[2]/form/div[4]/div/input")).sendKeys("809888238");
+
+//male or female
+        driver.findElement(By.xpath("//*[@id=\'basicBootstrapForm\']/div[5]/div/label[1]/input")).click();
+
+        //checkbox
+        driver.findElement(By.cssSelector("#checkbox2")).click();
+
+        //Going to select the skill
+       // driver.findElement(By.xpath("//*[@id='Skills']/option[3]")).click();
+
+        /*
+         * Drop down
+         * 1-------------> Ensure select tag is available---yes
+         * 2----> get the ID--yes
+         * 3----> Need to use Select class to wrap the element
+         * 4----> Three ways to access the same dropdown values
+         *          Selectbyindex
+         *           SelectByvalue
+         *          SelectByVisibleText 
+         * 
+         */
+
+         //got the dropdown id
+        WebElement dropdown= driver.findElement(By.id("Skills"));
+
+        // I used Select class to wrap that
+        Select selection=new Select(dropdown);
+
+        //use methods of selct to call the same
+        selection.selectByValue("Adobe Photoshop");
+
+        /*
+         * Way to Use scroll down method in selenium
+         * In selenium to schieve scroll down option by javscriptExecuter
+         * 1-----> I want to call the javascript executer
+         * 2----> Executescript and scroll the window
+         */
+
+        //1----javascript 
+         JavascriptExecutor js=(JavascriptExecutor) driver;
+         //2------> executescripot method and scrollby option and mentioning the pixel
+         js.executeScript("window.scrollBy(0,200)");
+
+         //wait time of 3 sec
+         Thread.sleep(3000);
+
+
+         //reverse
+        js.executeScript("window.scrollBy(0,-200)");
+
+        /*
+         * Hovering
+         * step 1------> select a class file
+         * Step 2-----> use Actions class do not forget
+         * step 3---> move to element using method movetoElement
+         * step 4----->finally include perform to perform the action
+         * 
+         */
+        //  WebElement hovering=driver.findElement(By.className("dropdown-toggle"));
+        //  Actions action=new Actions(driver);
+        //  action.moveToElement(hovering).perform();
+
+        //  Thread.sleep(3000);
+
+        //  driver.findElement(By.linkText("Alerts")).click();
+
+        //  Thread.sleep(4000);
+
+        //  driver.findElement(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[1]/button")).click();
+        //  // this is to handle the alert of the page
+
+        //  Thread.sleep(4000);
+        //  driver.switchTo().alert().accept();
+
+    //     driver.findElement(By.linkText("Windows")).click();
+    //     Thread.sleep(4000);
+    //     Thread.sleep(3000);
+    // driver.findElement(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[1]/a/button")).click();
+    // //to handle two tabs or more than two tabs are there , this is the way to handle
+    // /*
+    //  * Handle tabs
+    //  * driver.getWindowHandles();----->set
+    //  * Arraylist---->java
+    //  * ---> get (0)---->using array methods get the index values
+    //  */
+    // Set<String> driver_handler=driver.getWindowHandles();
+    // ArrayList<String> windowsId=new ArrayList<String>(driver_handler);
+    // System.out.println(windowsId.get(0));
+    // System.out.println(windowsId.get(1));
+    // //switching between tabs using the getWindowsHandles method
+
+    // Thread.sleep(3000);
+    // driver.switchTo().window(windowsId.get(0));
+    /*******************************************************************88888888888888888 */
+
+    // To enter the Iframe
+    /*
+     * To achieve frame u need to use Switching
+     * switching done by switchTo() method
+     */
+
+    //  Thread.sleep(5000);
+    
+    //  driver.findElement(By.linkText("Frames")).click();
+    //  Thread.sleep(4000);
+    // //frame link
+    // WebElement framing=driver.findElement(By.id("singleframe"));
+
+    // //switching to frame
+    // driver.switchTo().frame(framing);
+
+    // //sending the info
+    // driver.findElement(By.xpath("/html/body/section/div/div/div/input")).sendKeys("SKCT Eng co");
+
+
+         }
+        
+
+    //*******************************WEB SITE 3**********************************************************************
+/*
+ * To use mouse 
+ * use Actions class
+ */
+
+ @BeforeMethod()
+ public void connectMouseweb() throws InterruptedException{
+    System.out.println("3rd website created");
+
+ }
+    
+@Test(priority = 1)
+public void accessMouseclick() throws InterruptedException{
+    Thread.sleep(4000);
+
+
+driver.get("https://mouse-demo-ui.vercel.app/");
+Thread.sleep(4000);
+
+WebElement mousedouble=driver.findElement(By.xpath("/html/body/div/div/header/button[1]"));
+WebElement mouseclick=driver.findElement(By.id("click"));
+WebElement mouseclickhold=driver.findElement(By.id("click_hold"));
+WebElement mousehover=driver.findElement(By.id("hover"));
+
+//Mouse methods
+Actions action2=new Actions(driver);
+action2.doubleClick(mousedouble).perform();
+driver.switchTo().alert().accept();
+
+Thread.sleep(5000);
+action2.click(mouseclick).perform();
+driver.switchTo().alert().accept();
+
+Thread.sleep(5000);
+action2.clickAndHold(mouseclickhold).perform();
+
+
+Thread.sleep(5000);
+action2.moveToElement(mousehover).perform();
+
+        }
+
+
+    @AfterMethod()
+    public void myTestgotfinished(){
+        System.out.println("My Test got finished");
+    }
+
+
+    @AfterTest()
+    public void exitthecode(){
+        driver.quit();
+        System.out.println("My entire driver got quited");
+    }
+    
+
+
+ }
+        
+    
+         
+
+
+
+
+    
