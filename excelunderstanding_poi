@@ -1,0 +1,130 @@
+package com.example;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.AfterClass;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+public class AppTest {
+    // declare inside a class so it is accepted by all the methods that we are going
+    // to create
+    ChromeOptions option;
+    static RemoteWebDriver driver;
+
+    @BeforeTest()
+    public void driverConnect() throws MalformedURLException {
+        option = new ChromeOptions();
+        driver = new RemoteWebDriver(new URL("http://localhost:4444"), option);
+        System.out.println("I amm connecting a driver");
+
+    }
+    @Test
+    public void demoBlazexls() throws IOException{
+
+        /*
+         * Step 1--->define a path in a String datatype
+         * Step 2---> use FileInputstrem to pass the xls file
+         * Step 3---->object POI creation for XLSX using XSSFWorkbook
+         */
+
+         //path define, this is ubnutu system----->/---> root folder
+         String path="/home/coder/project/workspace/demo/src/Excel/Datapasser.xlsx";
+
+         //use FileInputstrem to pass the xls file
+         FileInputStream filepath=new FileInputStream(path);
+
+        //for .xlsx file
+        XSSFWorkbook workbook=new XSSFWorkbook(filepath);
+
+        //to get the number of sheets in the workbook
+        System.out.println("The number of sheets in the given workbook is : "+workbook.getNumberOfSheets());
+
+        /*
+         * access the sheet
+         * Step 1 : access the sheet, use method getSheet and getSheetAt
+         */
+
+         //sheet
+         XSSFSheet get_sheet=workbook.getSheet("Login");
+
+         //RoW
+         XSSFRow get_Row=get_sheet.getRow(1);
+
+         //Cell
+         XSSFCell get_cell=get_Row.getCell(0);
+
+         //accsess the data
+         String username=get_cell.getStringCellValue();
+         System.out.println("my username for the dbbank is : "+username);
+
+
+
+         
+
+
+
+
+    }
+
+    // @Test
+    // public void demoBlazelogin() throws InterruptedException {
+
+    //     driver.get("http://dbankdemo.com/bank/login");
+
+    //     //username
+    //     driver.findElement(By.id("username")).sendKeys("aj@gmail.com");
+
+    //     //password
+    //     driver.findElement(By.id("password")).sendKeys("Pass@123");
+
+    //     //click
+    //     driver.findElement(By.id("submit")).click();
+
+    //     //Thread
+    //     Thread.sleep(3000);
+
+    //     //check the url for home
+    //     if(driver.getCurrentUrl().contains("home")){
+    //         System.out.println("we have successfully logged in");
+    //     }
+
+        
+
+
+
+    // }
+
+}
