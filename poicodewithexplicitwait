@@ -1,0 +1,159 @@
+package com.example;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.AfterClass;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+public class AppTest {
+    // declare inside a class so it is accepted by all the methods that we are going
+    // to create
+    ChromeOptions option;
+    static RemoteWebDriver driver;
+    String username;
+    String password;
+
+    //Explicit wait 
+    WebDriverWait wait;
+
+    @BeforeTest()
+    public void driverConnect() throws MalformedURLException {
+        option = new ChromeOptions();
+        driver = new RemoteWebDriver(new URL("http://localhost:4444"), option);
+        System.out.println("I amm connecting a driver");
+
+    }
+    @Test(priority = 1)
+    public void demoBlazexls() throws IOException{
+        /*
+         * Step 1 ----> Add the dependency called Apache POI,(I need to access the microsoft formats like .xls,.xlsx)
+Step 2---->create a folder called Excel under src and inside the folder create a file called Datapasser.xlsx
+Step 3---> Define the project(confirmewd)
+                 web: http://dbankdemo.com/bank
+                 to sign in using the credentials of mine
+Step 4---->Data created in xlsx file
+
+         */
+
+        /*
+         * Step 1--->define a path in a String datatype
+         * Step 2---> use FileInputstrem to pass the xls file
+         * Step 3---->object POI creation for XLSX using XSSFWorkbook
+         */
+
+         //path define, this is ubnutu system----->/---> root folder
+         String path="/home/coder/project/workspace/demo/src/Excel/Datapasser.xlsx";
+
+         //use FileInputstrem to pass the xls file
+         FileInputStream filepath=new FileInputStream(path);
+
+        //for .xlsx file
+        XSSFWorkbook workbook=new XSSFWorkbook(filepath);
+
+        //to get the number of sheets in the workbook
+        System.out.println("The number of sheets in the given workbook is : "+workbook.getNumberOfSheets());
+
+        /*
+         * access the sheet
+         * Step 1 : access the sheet, use method getSheet and getSheetAt
+         */
+
+         //sheet
+         XSSFSheet get_sheet=workbook.getSheet("Login");
+
+         //RoW
+         XSSFRow get_Row=get_sheet.getRow(1);
+
+         //Cell
+         XSSFCell get_cell_username=get_Row.getCell(0);
+
+         //accsess the data
+         username=get_cell_username.getStringCellValue();
+         System.out.println("my username for the dbbank is : "+username);
+
+         //get the cell for password
+         XSSFCell get_cell_password=get_Row.getCell(1);
+
+         password=get_cell_password.getStringCellValue();
+         System.out.println("my password for the dbbank is : "+password);
+
+
+
+         
+
+
+
+
+    }
+
+    @Test(priority=2)
+    public void demoBlazelogin() throws InterruptedException {
+
+        driver.get("http://dbankdemo.com/bank/login");
+
+        //username, xpath
+        driver.findElement(By.id("username")).sendKeys(username);
+
+        //password, xpath
+        driver.findElement(By.id("password")).sendKeys(password);
+
+        
+        //click
+        //driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/button")).click();
+
+     wait=new WebDriverWait(driver, Duration.ofSeconds(2));
+        WebElement clickable=driver.findElement(By.xpath("/html/body/div[1]/div/div/div[2]/form/button"));
+        wait.until(ExpectedConditions.elementToBeClickable(clickable));
+        clickable.click();
+
+        //Thread, this is in milli seconds
+       // Thread.sleep(3000);
+
+        //instead of Threads we shall use , this is in seconds
+       driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+
+        //check the url for home
+        if(driver.getCurrentUrl().contains("home")){
+            System.out.println("we have successfully logged in");
+        }
+
+        
+
+
+
+    }
+
+}
