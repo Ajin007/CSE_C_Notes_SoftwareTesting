@@ -1,0 +1,6 @@
+1. Please add TestNG in the POM.xml file
+2. Change the ExcelReader.java file in Utils with code provided
+3. create DataTable.xlsx file, to pass theChocolate Data
+4. create a seperate class based on pages for three Test cases like Page.java,Page1.java,Page3.java
+5. browser.properties will have the browser information, so we use OpenBrowser() method of Base class to acces the data from there.
+6. If any doubts kindly do contact me
