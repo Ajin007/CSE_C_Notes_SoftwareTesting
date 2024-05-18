@@ -1,0 +1,183 @@
+package runner;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import org.testng.annotations.Test;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.junit.Cucumber;
+import pageobject.Page;
+import pageobject.Page2;
+import pageobject.Page3;
+import utils.Base;
+import utils.ExcelReader;
+import utils.LoggerHandler;
+import utils.Reporter;
+import utils.Screenshot;
+
+
+// @RunWith(Cucumber.class)
+// @CucumberOptions(features="Your Path",
+// 				glue = "")
+public class RunTest extends Base {
+
+    private ExcelReader reader=new ExcelReader();
+    WebDriver driver;
+    String url="https://spencers.in/";
+    String email="testing@gmail.com";
+    String password="Example20@";
+    Page2 page2=new Page2(driver);
+    String screenshotname="Spenser Screenshot";
+    ExtentReports reporter=Reporter.generateExtentReport("Spenser Report");
+    
+
+
+	@Test(priority = 0)
+    public void Test1() throws Exception {
+
+        //If I did not use my Test case will fail
+    driver=openBrowser();
+
+    /*
+     * Hi this is just to point the locators 
+     */
+    // WebElement sbar = driver.findElement(By.xpath("/html/body/div[3]/header/div[2]/div[3]"));
+    //     sbar.click();
+
+    // WebElement searcharea=driver.findElement(By.xpath("//*[@id='search']"));
+    // searcharea.click();
+    // searcharea.sendKeys("Chocolate",Keys.ENTER);
+    // Thread.sleep(4000);
+    // driver.findElement(By.xpath("/html/body/div[3]/main/div[3]/div[2]/div/div[2]/div/div[1]/div[2]/button")).click();
+    // Thread.sleep(2000);
+    // driver.findElement(By.xpath("//*[@id=\"narrow-by-list\"]/div[1]/div[2]/form/ul/li[6]/a")).click();
+    // Thread.sleep(2000);
+    // driver.findElement(By.className("tocart")).click();
+    // driver.findElement(By.xpath("/html/body/div[3]/header/div[2]/div[2]/div[1]/a")).click();
+    // Thread.sleep(2000);
+    // driver.findElement(By.xpath("/html/body/div[3]/header/div[2]/div[2]/div[1]/div/div[2]/div[1]/div[2]/div[4]/div/a")).click();
+
+    /*
+     * first page data passage
+     */
+      String DataReader= reader.readdata("/home/coder/project/workspace/Project/testdata/Datainput.xlsx", "Sheet1", 1, 0);
+      System.out.println(DataReader);
+    
+      /*
+       * Your Object model that you created is called from Page.java file and the methods are accessed
+       * Here the data alone will be passed, other business logic will be done in the Page.java file
+       */
+      Page page=new Page(driver);
+      page.firstClick();
+        page.enterClick();
+        page.enterText(DataReader);
+        Thread.sleep(3000);
+        page.clickGo();
+        Thread.sleep(2000);
+        page.exposeClick();
+        Thread.sleep(2000);
+        page.selectFilterClick();
+        Thread.sleep(2000);
+        page.addCart();
+        Thread.sleep(2000);
+        page.clickIcon();
+        Thread.sleep(4000);
+        page.viewCart();
+        ExtentTest test=reporter.createTest("Test1");
+        //this is for Report
+        test.log(Status.INFO, "test Executed");
+        //this is for log4j 
+        log.logInfo("test1 executed");
+  
+        
+        
+
+}
+
+@Test(priority = 1)
+public void Test2() throws InterruptedException{
+  driver.navigate().to(url);
+//     Thread.sleep(2000);
+//     driver.findElement(By.linkText("Groceries & Staples")).click();
+//     driver.findElement(By.xpath("//*[@id='ui-id-20']")).click();
+//     Thread.sleep(2000);
+//     driver.findElement(By.xpath("//*[@id='narrow-by-list']/div[1]/div[2]/form/ul/li[2]")).click();
+//    System.out.println(driver.findElement(By.xpath("/html/body/div[3]/main/div[4]/div/div[2]/div/div[2]/div[1]/ol/li[1]/div")).getText());
+
+   Page2 page2=new Page2(driver);
+   page2.clickGroceries();
+   page2.viewGroceries();
+   Thread.sleep(2000);
+   page2.filterInGroceries();
+   LoggerHandler.logInfo("Second page got passed");
+   ExtentTest test2=reporter.createTest("Test1");
+   test2.log(Status.INFO, "test prio 1 Started");
+
+   log.logInfo("Test2 executed");
+   
+
+}
+
+@Test(priority = 2)
+public void Test3() throws InterruptedException, IOException{
+     driver.navigate().to(url);
+  
+     Thread.sleep(3000);
+    // driver.findElement(By.xpath("/html/body/div[3]/header/div[2]/div[2]/div[3]/div[1]/div[1]")).click();
+    //     Thread.sleep(2000);
+    //     driver.findElement(By.xpath("/html/body/div[3]/header/div[2]/div[2]/div[3]/div[1]/div[2]/div/div[2]/div[5]/div/div/a")).click();
+    //     Thread.sleep(2000);
+    //     driver.findElement(By.id("email")).sendKeys("testing@gmail.com");
+    //     driver.findElement(By.id("pass")).sendKeys("Example20@");
+    //     driver.findElement(By.xpath("/html/body/div[2]/div/div[1]/div/div[3]/div[2]/div/form/fieldset/div[4]/div[1]/button")).click();
+    //     Thread.sleep(3000);
+    
+
+        Page3 page3=new Page3(driver);
+        page3.clickLoginIcon();
+        Thread.sleep(2000);
+        page3.loginPopup();
+        Thread.sleep(2000);
+        page3.emailPasser(email);
+        page3.passwordPasser(password);
+        page3.clickLoginButton();
+        Thread.sleep(3000);
+        log.logInfo("Test3 executed");
+        /*
+         * Here in the below methods I tried accessing the data from our utils
+         * If you want you shall create your own object and access the same
+         */
+        Screenshot.getScreenShot(driver, "Login Error page");
+        LoggerHandler.logWarn("Need to check the screen shot for the error message");
+        ExtentTest test3=reporter.createTest("Test1");
+        test3.log(Status.INFO, "test prio 2 Started");
+     Reporter.attachScreenshotToReport(test3, driver, screenshotname);
+        
+        
+
+
+
+}
+
+
+
+}
+
